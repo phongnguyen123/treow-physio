@@ -1,38 +1,32 @@
 'use server';
 
-import fs from 'fs/promises';
-import path from 'path';
-
-const dataDirectory = path.join(process.cwd(), 'data');
-const subscribersFilePath = path.join(dataDirectory, 'subscribers.json');
+import { revalidatePath } from 'next/cache';
+import { getAllSubscribers, addSubscriber, removeSubscriber } from '@/lib/db-newsletters';
 
 export interface Subscriber {
     id: string;
     email: string;
-    createdAt: string;
-    active: boolean;
-}
-
-async function ensureSubscribersFile() {
-    try {
-        await fs.access(subscribersFilePath);
-    } catch {
-        await fs.writeFile(subscribersFilePath, '[]');
-    }
+    subscribedAt: string;
+    status: 'ACTIVE' | 'UNSUBSCRIBED';
 }
 
 export async function getSubscribers(): Promise<Subscriber[]> {
-    await ensureSubscribersFile();
     try {
-        const fileContent = await fs.readFile(subscribersFilePath, 'utf8');
-        return JSON.parse(fileContent);
+        const subscribers = await getAllSubscribers();
+        // Map to match old interface
+        return subscribers.map(s => ({
+            id: s.id,
+            email: s.email,
+            subscribedAt: s.subscribedAt,
+            status: s.status
+        }));
     } catch (error) {
+        console.error('Error fetching subscribers:', error);
         return [];
     }
 }
 
 export async function subscribeToNewsletter(email: string): Promise<{ success: boolean; error?: string }> {
-    await ensureSubscribersFile();
     try {
         // Validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -40,36 +34,30 @@ export async function subscribeToNewsletter(email: string): Promise<{ success: b
             return { success: false, error: 'Email không hợp lệ' };
         }
 
-        const subscribers = await getSubscribers();
+        const result = await addSubscriber(email);
 
-        if (subscribers.some(s => s.email === email)) {
-            return { success: false, error: 'Email này đã được đăng ký' };
+        if (result.success) {
+            revalidatePath('/admin/newsletter');
         }
 
-        const newSubscriber: Subscriber = {
-            id: Date.now().toString(),
-            email,
-            createdAt: new Date().toISOString(),
-            active: true
-        };
-
-        subscribers.push(newSubscriber);
-        await fs.writeFile(subscribersFilePath, JSON.stringify(subscribers, null, 2));
-
-        return { success: true };
+        return result;
     } catch (error) {
         console.error('Error subscribing:', error);
-        return { success: false, error: 'Lỗi hệ thống' };
+        return { success: false, error: 'Lỗi hệ thống. Vui lòng thử lại.' };
     }
 }
 
 export async function unsubscribeFromNewsletter(email: string): Promise<{ success: boolean; error?: string }> {
     try {
-        const subscribers = await getSubscribers();
-        const updatedSubscribers = subscribers.filter(s => s.email !== email);
-        await fs.writeFile(subscribersFilePath, JSON.stringify(updatedSubscribers, null, 2));
-        return { success: true };
+        const result = await removeSubscriber(email);
+
+        if (result.success) {
+            revalidatePath('/admin/newsletter');
+        }
+
+        return result;
     } catch (error) {
-        return { success: false, error: 'Lỗi hệ thống' };
+        console.error('Error unsubscribing:', error);
+        return { success: false, error: 'Lỗi hệ thống. Vui lòng thử lại.' };
     }
 }
