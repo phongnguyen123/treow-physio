@@ -6,6 +6,9 @@ import path from 'path';
 const dataDirectory = path.join(process.cwd(), 'data');
 const settingsFilePath = path.join(dataDirectory, 'settings.json');
 
+// Check if running on Vercel (read-only filesystem)
+const isVercel = process.env.VERCEL === '1';
+
 export interface AppSettings {
     email: {
         adminEmails: string[];
@@ -16,6 +19,11 @@ export interface AppSettings {
 
 // Helper to ensure data directory and file exist
 async function ensureSettingsFile() {
+    if (isVercel) {
+        // On Vercel, skip file creation
+        return;
+    }
+
     try {
         await fs.access(settingsFilePath);
     } catch {
@@ -29,21 +37,47 @@ async function ensureSettingsFile() {
 }
 
 export async function getSettings(): Promise<AppSettings> {
-    await ensureSettingsFile();
-    try {
-        const fileContent = await fs.readFile(settingsFilePath, 'utf8');
-        return JSON.parse(fileContent);
-    } catch (error) {
-        console.error('Error reading settings:', error);
-        return {
-            email: {
-                adminEmails: [],
-            }
-        };
+    // Priority 1: Environment variables (for production/Vercel)
+    const envSmtpUser = process.env.SMTP_USER;
+    const envSmtpPass = process.env.SMTP_APP_PASSWORD;
+
+    let fileSettings: AppSettings = {
+        email: {
+            adminEmails: [],
+        }
+    };
+
+    // Priority 2: File-based settings (for local development)
+    if (!isVercel) {
+        await ensureSettingsFile();
+        try {
+            const fileContent = await fs.readFile(settingsFilePath, 'utf8');
+            fileSettings = JSON.parse(fileContent);
+        } catch (error) {
+            console.error('Error reading settings:', error);
+        }
     }
+
+    // Merge: Environment variables override file settings
+    return {
+        email: {
+            adminEmails: fileSettings.email.adminEmails || [],
+            smtpUser: envSmtpUser || fileSettings.email.smtpUser,
+            smtpPass: envSmtpPass || fileSettings.email.smtpPass,
+        }
+    };
 }
 
-export async function updateSettings(newSettings: Partial<AppSettings>): Promise<{ success: boolean; error?: string }> {
+export async function updateSettings(newSettings: Partial<AppSettings>): Promise<{ success: boolean; error?: string; warning?: string }> {
+    // On Vercel, settings cannot be saved to file
+    if (isVercel) {
+        return {
+            success: false,
+            error: 'Cannot save settings on Vercel. Please use Environment Variables instead.',
+            warning: 'Go to Vercel Dashboard → Settings → Environment Variables to configure SMTP_USER and SMTP_APP_PASSWORD'
+        };
+    }
+
     await ensureSettingsFile();
     try {
         const currentSettings = await getSettings();
