@@ -1,8 +1,14 @@
 import { sql } from '@vercel/postgres';
 import { Post, Booking, Author } from '@/types';
 
-// Check if running on Vercel or if Postgres is available
-const usePostgres = process.env.POSTGRES_URL !== undefined;
+// Helper to check environment dynamically
+const shouldUsePostgres = () => {
+    // Debug log to help troubleshoot (will appear in Vercel logs)
+    if (process.env.NODE_ENV === 'production' && !process.env.POSTGRES_URL) {
+        console.warn('⚠️ POSTGRES_URL is missing in production environment!');
+    }
+    return process.env.POSTGRES_URL !== undefined;
+};
 
 /**
  * New Postgres-based database layer
@@ -20,7 +26,7 @@ function generateId(): string {
 // Posts database functions
 export const postsDb = {
     async getAll(): Promise<Post[]> {
-        if (!usePostgres) return jsonDb.postsDb.getAll();
+        if (!shouldUsePostgres()) return jsonDb.postsDb.getAll();
 
         try {
             const result = await sql<Post>`
@@ -48,7 +54,7 @@ export const postsDb = {
     },
 
     async getById(id: string): Promise<Post | null> {
-        if (!usePostgres) return jsonDb.postsDb.getById(id);
+        if (!shouldUsePostgres()) return jsonDb.postsDb.getById(id);
 
         try {
             const result = await sql<Post>`
@@ -76,7 +82,7 @@ export const postsDb = {
     },
 
     async getBySlug(slug: string): Promise<Post | null> {
-        if (!usePostgres) return jsonDb.postsDb.getBySlug(slug);
+        if (!shouldUsePostgres()) return jsonDb.postsDb.getBySlug(slug);
 
         try {
             const result = await sql<Post>`
@@ -104,7 +110,7 @@ export const postsDb = {
     },
 
     async create(post: Post): Promise<Post> {
-        if (!usePostgres) return jsonDb.postsDb.create(post);
+        if (!shouldUsePostgres()) return jsonDb.postsDb.create(post);
 
         try {
             await sql`
@@ -135,7 +141,7 @@ export const postsDb = {
     },
 
     async update(id: string, updates: Partial<Post>): Promise<Post | null> {
-        if (!usePostgres) return jsonDb.postsDb.update(id, updates);
+        if (!shouldUsePostgres()) return jsonDb.postsDb.update(id, updates);
 
         try {
             const current = await this.getById(id);
@@ -166,7 +172,7 @@ export const postsDb = {
     },
 
     async delete(id: string): Promise<boolean> {
-        if (!usePostgres) return jsonDb.postsDb.delete(id);
+        if (!shouldUsePostgres()) return jsonDb.postsDb.delete(id);
 
         try {
             const result = await sql`DELETE FROM posts WHERE id = ${id}`;
@@ -181,7 +187,7 @@ export const postsDb = {
 // Bookings database functions
 export const bookingsDb = {
     async getAll(): Promise<Booking[]> {
-        if (!usePostgres) return jsonDb.bookingsDb.getAll();
+        if (!shouldUsePostgres()) return jsonDb.bookingsDb.getAll();
 
         try {
             const result = await sql<Booking>`
@@ -208,7 +214,7 @@ export const bookingsDb = {
     },
 
     async getById(id: string): Promise<Booking | null> {
-        if (!usePostgres) return jsonDb.bookingsDb.getById(id);
+        if (!shouldUsePostgres()) return jsonDb.bookingsDb.getById(id);
 
         try {
             const result = await sql<Booking>`
@@ -235,7 +241,12 @@ export const bookingsDb = {
     },
 
     async create(booking: Booking): Promise<Booking> {
-        if (!usePostgres) return jsonDb.bookingsDb.create(booking);
+        // Log environment status before attempting create
+        if (process.env.NODE_ENV === 'production') {
+            console.log('BookingsDb.create: Checking DB connection. PostgesURL present:', shouldUsePostgres());
+        }
+
+        if (!shouldUsePostgres()) return jsonDb.bookingsDb.create(booking);
 
         try {
             await sql`
@@ -265,7 +276,7 @@ export const bookingsDb = {
     },
 
     async update(id: string, updates: Partial<Booking>): Promise<Booking | null> {
-        if (!usePostgres) return jsonDb.bookingsDb.update(id, updates);
+        if (!shouldUsePostgres()) return jsonDb.bookingsDb.update(id, updates);
 
         try {
             const current = await this.getById(id);
@@ -295,7 +306,7 @@ export const bookingsDb = {
     },
 
     async delete(id: string): Promise<boolean> {
-        if (!usePostgres) return jsonDb.bookingsDb.delete(id);
+        if (!shouldUsePostgres()) return jsonDb.bookingsDb.delete(id);
 
         try {
             const result = await sql`DELETE FROM bookings WHERE id = ${id}`;
@@ -310,7 +321,7 @@ export const bookingsDb = {
 // Authors database functions
 export const authorsDb = {
     async getAll(): Promise<Author[]> {
-        if (!usePostgres) return jsonDb.authorsDb.getAll();
+        if (!shouldUsePostgres()) return jsonDb.authorsDb.getAll();
 
         try {
             const result = await sql<Author>`
@@ -336,7 +347,7 @@ export const authorsDb = {
     },
 
     async getById(id: string): Promise<Author | null> {
-        if (!usePostgres) return jsonDb.authorsDb.getById(id);
+        if (!shouldUsePostgres()) return jsonDb.authorsDb.getById(id);
 
         try {
             const result = await sql<Author>`
@@ -362,7 +373,7 @@ export const authorsDb = {
     },
 
     async getBySlug(slug: string): Promise<Author | null> {
-        if (!usePostgres) return jsonDb.authorsDb.getBySlug(slug);
+        if (!shouldUsePostgres()) return jsonDb.authorsDb.getBySlug(slug);
 
         try {
             const result = await sql<Author>`
@@ -388,7 +399,7 @@ export const authorsDb = {
     },
 
     async create(author: Author): Promise<Author> {
-        if (!usePostgres) return jsonDb.authorsDb.create(author);
+        if (!shouldUsePostgres()) return jsonDb.authorsDb.create(author);
 
         try {
             await sql`
@@ -417,7 +428,7 @@ export const authorsDb = {
     },
 
     async update(id: string, updates: Partial<Author>): Promise<Author | null> {
-        if (!usePostgres) return jsonDb.authorsDb.update(id, updates);
+        if (!shouldUsePostgres()) return jsonDb.authorsDb.update(id, updates);
 
         try {
             const current = await this.getById(id);
@@ -446,7 +457,7 @@ export const authorsDb = {
     },
 
     async delete(id: string): Promise<boolean> {
-        if (!usePostgres) return jsonDb.authorsDb.delete(id);
+        if (!shouldUsePostgres()) return jsonDb.authorsDb.delete(id);
 
         try {
             const result = await sql`DELETE FROM authors WHERE id = ${id}`;

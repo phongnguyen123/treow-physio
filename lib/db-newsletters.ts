@@ -12,8 +12,10 @@ interface Newsletter {
     status: 'ACTIVE' | 'UNSUBSCRIBED';
 }
 
-// Check if Postgres is available
-const usePostgres = process.env.POSTGRES_URL !== undefined;
+// Helper to check environment dynamically
+const shouldUsePostgres = () => {
+    return process.env.POSTGRES_URL !== undefined;
+};
 
 function generateId(): string {
     return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -21,7 +23,7 @@ function generateId(): string {
 
 export const newslettersDb = {
     async getAll(): Promise<Newsletter[]> {
-        if (!usePostgres) {
+        if (!shouldUsePostgres()) {
             // Fallback to JSON file
             try {
                 const fs = await import('fs/promises');
@@ -52,7 +54,7 @@ export const newslettersDb = {
     },
 
     async getByEmail(email: string): Promise<Newsletter | null> {
-        if (!usePostgres) {
+        if (!shouldUsePostgres()) {
             const all = await this.getAll();
             return all.find(n => n.email === email) || null;
         }
@@ -75,7 +77,7 @@ export const newslettersDb = {
     },
 
     async create(newsletter: Newsletter): Promise<Newsletter> {
-        if (!usePostgres) {
+        if (!shouldUsePostgres()) {
             throw new Error('Cannot write to filesystem on Vercel. Please configure Postgres.');
         }
 
@@ -97,7 +99,7 @@ export const newslettersDb = {
     },
 
     async update(id: string, updates: Partial<Newsletter>): Promise<Newsletter | null> {
-        if (!usePostgres) {
+        if (!shouldUsePostgres()) {
             throw new Error('Cannot write to filesystem on Vercel. Please configure Postgres.');
         }
 
@@ -122,7 +124,7 @@ export const newslettersDb = {
     },
 
     async delete(id: string): Promise<boolean> {
-        if (!usePostgres) {
+        if (!shouldUsePostgres()) {
             throw new Error('Cannot write to filesystem on Vercel. Please configure Postgres.');
         }
 
