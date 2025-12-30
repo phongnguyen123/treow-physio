@@ -1,0 +1,105 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme inline {
+  --color-primary: #6B9B7A;
+  --color-primary-content: #ffffff;
+  --color-background-light: #F5F9F6;
+  --color-background-dark: #1A3A2A;
+  --color-text-main: #1A3A2A;
+  --color-text-sub: #6B9B7A;
+  --color-card-bg: #ffffff;
+  --color-border-color: #E8F3EC;
+
+  --font-display: var(--font-lexend), sans-serif;
+  --font-body: var(--font-noto-sans), sans-serif;
+
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Mapping default radius to sm as per original 0.25rem */
+  --radius-DEFAULT: 0.25rem;
+}
+
+@layer base {
+  body {
+    @apply bg-background-light text-text-main font-display antialiased;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  /* Optional: explicit dark mode overrides if needed, 
+     but the design seems to use specific classes like bg-background-light 
+     and dark:bg-background-dark in specific places. 
+     We'll leave the base setup simple. */
+}
+
+/* TipTap Editor Styles */
+.tiptap {
+  outline: none;
+}
+
+.tiptap p {
+  margin-bottom: 1rem;
+}
+
+.tiptap h1,
+.tiptap h2,
+.tiptap h3,
+.tiptap h4 {
+  font-weight: 900;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.tiptap h1 {
+  font-size: 2rem;
+}
+
+.tiptap h2 {
+  font-size: 1.5rem;
+}
+
+.tiptap h3 {
+  font-size: 1.25rem;
+}
+
+.tiptap h4 {
+  font-size: 1.125rem;
+}
+
+.tiptap ul,
+.tiptap ol {
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+.tiptap li {
+  margin: 0.5rem 0;
+}
+
+.tiptap img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.tiptap a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.tiptap strong {
+  font-weight: 700;
+}
+
+.tiptap em {
+  font-style: italic;
+}

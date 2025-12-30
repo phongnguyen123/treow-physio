@@ -1,0 +1,51 @@
+[
+  {
+    "id": "default-author",
+    "name": "Dr Duy",
+    "slug": "dr-duy",
+    "avatar": "/uploads/1767092392574-ar857imq7h9.png",
+    "bio": "Bác sỹ Vật lý trị liệu – Nhà sáng lập Treow\n\nDr. Duy là bác sỹ Vật lý trị liệu với nền tảng chuyên môn vững chắc trong lĩnh vực điều trị đau cơ xương khớp và phục hồi vận động. Trước khi sáng lập Treow, anh đã có nhiều năm trực tiếp làm việc với các bệnh nhân gặp vấn đề về đau cổ – vai – gáy, thắt lưng, sai lệch tư thế, căng cơ do áp lực công việc và lối sống hiện đại.\n\nĐiểm khác biệt trong triết lý điều trị của Dr. Duy nằm ở cách anh nhìn nhận cơn đau không chỉ là triệu chứng, mà là kết quả của sự mất cân bằng kéo dài giữa vận động – tư thế – thần kinh – cảm xúc. Vì vậy, mỗi ca điều trị tại Treow đều bắt đầu bằng việc đánh giá kỹ lưỡng, tìm ra nguyên nhân gốc rễ thay vì chỉ xử lý phần đau trước mắt.\n\nVới Dr. Duy, vật lý trị liệu không đơn thuần là thao tác kỹ thuật. Đó là quá trình đối thoại giữa người điều trị và cơ thể bệnh nhân – nơi sự chính xác, nhẹ nhàng và kiên nhẫn đóng vai trò then chốt. Anh theo đuổi phương pháp điều trị an toàn, không xâm lấn, hạn chế phụ thuộc thuốc, hướng đến phục hồi tự nhiên và bền vững.\n\nTreow – Từ triết lý cá nhân đến không gian trị liệu\n\nTreow được Dr. Duy sáng lập với mong muốn xây dựng một không gian vật lý trị liệu khác với hình ảnh phòng khám truyền thống. Tại đây, bệnh nhân không chỉ đến để “hết đau nhanh”, mà để hiểu cơ thể mình hơn, học cách vận động đúng và duy trì sức khỏe lâu dài.\n\nTreow kết hợp:\n\nChuẩn mực y khoa trong đánh giá và điều trị\n\nKỹ thuật vật lý trị liệu hiện đại\n\nKhông gian trị liệu nhẹ nhàng, yên tĩnh, giảm căng thẳng tâm lý\n\nTheo Dr. Duy, khi cơ thể được đặt trong một môi trường đủ an toàn và thư giãn, quá trình phục hồi diễn ra tự nhiên và hiệu quả hơn rất nhiều.\n\nGiá trị cốt lõi Dr. Duy theo đuổi\n\nĐiều trị dựa trên nguyên nhân – không chạy theo triệu chứng\n\nTôn trọng nhịp phục hồi tự nhiên của cơ thể\n\nCá nhân hóa phác đồ cho từng bệnh nhân\n\nGiúp bệnh nhân chủ động phòng ngừa tái phát, không phụ thuộc điều trị lâu dài\n\nDr. Duy tin rằng một bác sỹ vật lý trị liệu giỏi không chỉ giúp bệnh nhân hết đau hôm nay, mà còn giúp họ không phải quay lại vì cùng một cơn đau trong tương lai.",
+    "socialLinks": {
+      "facebook": "https://www.facebook.com/DuyDichDanh",
+      "linkedin": "https://linkedin.com/company/tredov"
+    },
+    "createdAt": "2024-12-01T00:00:00.000Z",
+    "updatedAt": "2025-12-30T11:01:21.480Z"
+  },
+  {
+    "id": "dr-nguyen-van-an",
+    "name": "Dr. Nguyễn Văn An",
+    "slug": "dr-nguyen-van-an",
+    "avatar": "/images/avatars/avatar-1.jpg",
+    "bio": "Chuyên gia đầu ngành về Cơ xương khớp với hơn 15 năm kinh nghiệm làm việc tại các bệnh viện lớn ở London. Tốt nghiệp Tiến sĩ tại Đại học UCL.",
+    "socialLinks": {
+      "linkedin": "https://linkedin.com"
+    },
+    "createdAt": "2024-12-01T00:00:00.000Z",
+    "updatedAt": "2024-12-01T00:00:00.000Z"
+  },
+  {
+    "id": "msc-tran-thi-mai",
+    "name": "ThS. Trần Thị Mai",
+    "slug": "ths-tran-thi-mai",
+    "avatar": "/images/avatars/avatar-2.jpg",
+    "bio": "Chuyên gia Vật lý trị liệu Nhi & Thai kỳ. Tận tâm và thấu hiểu tâm lý trẻ nhỏ, giúp hàng nghìn bà mẹ vượt cạn an toàn.",
+    "socialLinks": {
+      "facebook": "https://facebook.com"
+    },
+    "createdAt": "2024-12-01T00:00:00.000Z",
+    "updatedAt": "2024-12-01T00:00:00.000Z"
+  },
+  {
+    "id": "dr-le-hoang-nam",
+    "name": "Dr. Lê Hoàng Nam",
+    "slug": "dr-le-hoang-nam",
+    "avatar": "/images/avatars/avatar-3.jpg",
+    "bio": "Chuyên gia Phục hồi chức năng Thể thao. Từng là bác sĩ chăm sóc cho đội tuyển Olympic Việt Nam.",
+    "socialLinks": {
+      "twitter": "https://twitter.com"
+    },
+    "createdAt": "2024-12-01T00:00:00.000Z",
+    "updatedAt": "2024-12-01T00:00:00.000Z"
+  }
+]
