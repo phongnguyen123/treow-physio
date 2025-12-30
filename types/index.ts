@@ -12,6 +12,8 @@ export interface Author {
     name: string;
     slug: string;
     avatar: string;
+    title?: string;
+    email?: string;
     bio: string;
     socialLinks: SocialLinks;
     createdAt: string;
@@ -23,6 +25,8 @@ export interface CreateAuthorInput {
     avatar: string;
     bio: string;
     socialLinks?: SocialLinks;
+    title?: string;
+    email?: string;
 }
 
 export interface UpdateAuthorInput extends Partial<CreateAuthorInput> {
@@ -55,6 +59,7 @@ export interface Booking {
     date: string;
     time: string;
     message?: string;
+    notes?: string;
     status: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
     createdAt: string;
     updatedAt: string;
@@ -85,6 +90,7 @@ export interface CreateBookingInput {
     date: string;
     time: string;
     message?: string;
+    notes?: string;
 }
 
 export interface UpdateBookingInput {
@@ -92,4 +98,5 @@ export interface UpdateBookingInput {
     status?: BookingStatus;
     date?: string;
     time?: string;
+    notes?: string;
 }

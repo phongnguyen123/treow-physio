@@ -170,7 +170,7 @@ export const postsDb = {
 
         try {
             const result = await sql`DELETE FROM posts WHERE id = ${id}`;
-            return result.rowCount > 0;
+            return (result.rowCount ?? 0) > 0;
         } catch (error) {
             console.error('Error deleting post:', error);
             return false;
@@ -299,7 +299,7 @@ export const bookingsDb = {
 
         try {
             const result = await sql`DELETE FROM bookings WHERE id = ${id}`;
-            return result.rowCount > 0;
+            return (result.rowCount ?? 0) > 0;
         } catch (error) {
             console.error('Error deleting booking:', error);
             return false;
@@ -450,7 +450,7 @@ export const authorsDb = {
 
         try {
             const result = await sql`DELETE FROM authors WHERE id = ${id}`;
-            return result.rowCount > 0;
+            return (result.rowCount ?? 0) > 0;
         } catch (error) {
             console.error('Error deleting author:', error);
             return false;
