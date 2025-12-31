@@ -54,6 +54,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
 }
 
+// Generate static params for all authors
+export async function generateStaticParams() {
+    const { getAuthors } = await import('@/lib/actions/authors');
+    const authors = await getAuthors();
+
+    // Filter out authors without slug
+    return authors
+        .filter((author) => author.slug && author.slug.trim() !== '')
+        .map((author) => ({
+            slug: author.slug,
+        }));
+}
+
 export default async function AuthorPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
     const author = await getAuthorBySlug(slug);

@@ -106,14 +106,17 @@ export const bookingsDb = {
                 createdAt: 'desc',
             },
         })
-        return bookings as any[]
+        // Map Prisma 'name' field to TypeScript 'fullName'
+        return bookings.map(b => ({ ...b, fullName: b.name })) as any[]
     },
 
     async getById(id: string): Promise<Booking | null> {
         const booking = await prisma.booking.findUnique({
             where: { id },
         })
-        return booking as any
+        if (!booking) return null
+        // Map Prisma 'name' field to TypeScript 'fullName'
+        return { ...booking, fullName: booking.name } as any
     },
 
     async create(booking: Booking): Promise<Booking> {
@@ -180,13 +183,18 @@ export const authorsDb = {
     },
 
     async getBySlug(slug: string): Promise<Author | null> {
-        // Note: Author model doesn't have slug in Prisma schema
-        // We'll need to add it or use name/id
-        const authors = await prisma.author.findMany()
-        const author = authors.find(a =>
-            a.name.toLowerCase().replace(/\s+/g, '-') === slug
-        )
-        return author as any || null
+        try {
+            // Fallback to raw query to bypass outdated Prisma Client schema validation
+            // if the dev server hasn't picked up the new schema changes yet
+            const authors = await prisma.$queryRaw<Author[]>`SELECT * FROM "authors" WHERE "slug" = ${slug} LIMIT 1`
+            if (Array.isArray(authors) && authors.length > 0) {
+                return authors[0]
+            }
+            return null
+        } catch (error) {
+            console.error('Error fetching author by slug:', error)
+            return null
+        }
     },
 
     async create(author: Author): Promise<Author> {
