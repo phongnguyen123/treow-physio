@@ -37,9 +37,7 @@ export default function BookingPage() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<{ success: boolean; message: string } | null>(null);
 
-    const selectedService = selectedServiceId === "free-consultation"
-        ? { id: "free-consultation", title: "Tư vấn miễn phí", shortDescription: "Dr. Duy sẽ tư vấn miễn phí nếu bạn chưa biết rõ tình trạng của mình" }
-        : servicesData.find(s => s.id === selectedServiceId) || servicesData[0];
+    const selectedService = servicesData.find(s => s.id === selectedServiceId) || servicesData[0];
 
     // Calendar Logic
     const daysInMonth = getDaysInMonth(currentDate.getFullYear(), currentDate.getMonth());
@@ -179,43 +177,6 @@ export default function BookingPage() {
                                     </div>
                                 ))}
 
-                                {/* Free Consultation Option - Last */}
-                                <div
-                                    onClick={() => setSelectedServiceId("free-consultation")}
-                                    className={`relative group flex gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 overflow-hidden ${selectedServiceId === "free-consultation"
-                                        ? "border-primary bg-primary/5"
-                                        : "border-gray-100 bg-white hover:border-primary/50"
-                                        }`}
-                                >
-                                    {/* Dr. Duy Background Image */}
-                                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl">
-                                        <Image
-                                            src="/images/team/dr-duy-portrait.jpg"
-                                            alt="Dr. Duy"
-                                            fill
-                                            className="object-cover"
-                                        />
-                                    </div>
-                                    <div className="flex-1 relative z-10">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <h3 className="font-bold text-text-main group-hover:text-primary transition-colors">
-                                                Tư vấn miễn phí
-                                            </h3>
-                                            <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">
-                                                MIỄN PHÍ
-                                            </span>
-                                        </div>
-                                        <p className="text-sm text-text-sub mt-1">
-                                            Dr. Duy sẽ tư vấn miễn phí nếu bạn chưa biết rõ tình trạng của mình
-                                        </p>
-                                    </div>
-                                    {/* Checkmark */}
-                                    {selectedServiceId === "free-consultation" && (
-                                        <div className="absolute top-4 right-4 text-primary z-10">
-                                            <span className="material-symbols-outlined filled">check_circle</span>
-                                        </div>
-                                    )}
-                                </div>
                             </div>
                         </section>
 

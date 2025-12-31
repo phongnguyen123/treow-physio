@@ -145,9 +145,9 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
                             </p>
 
                             {/* Social Links */}
-                            {(author.socialLinks.facebook || author.socialLinks.linkedin || author.socialLinks.twitter) && (
+                            {(author.socialLinks?.facebook || author.socialLinks?.linkedin || author.socialLinks?.twitter) && (
                                 <div className="flex flex-wrap gap-3">
-                                    {author.socialLinks.facebook && (
+                                    {author.socialLinks?.facebook && (
                                         <a
                                             href={author.socialLinks.facebook}
                                             target="_blank"
@@ -158,7 +158,7 @@ export default async function AuthorPage({ params }: { params: Promise<{ slug: s
                                             Facebook
                                         </a>
                                     )}
-                                    {author.socialLinks.linkedin && (
+                                    {author.socialLinks?.linkedin && (
                                         <a
                                             href={author.socialLinks.linkedin}
                                             target="_blank"

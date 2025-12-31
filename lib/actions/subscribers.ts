@@ -1,24 +1,28 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
-import { getAllSubscribers, addSubscriber, removeSubscriber } from '@/lib/db-newsletters';
+import { prisma } from '@/lib/prisma';
 
 export interface Subscriber {
     id: string;
     email: string;
-    subscribedAt: string;
-    status: 'ACTIVE' | 'UNSUBSCRIBED';
+    name?: string;
+    status: string;
+    createdAt: string;
 }
 
 export async function getSubscribers(): Promise<Subscriber[]> {
     try {
-        const subscribers = await getAllSubscribers();
-        // Map to match old interface
+        const subscribers = await prisma.subscriber.findMany({
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
         return subscribers.map(s => ({
             id: s.id,
             email: s.email,
-            subscribedAt: s.subscribedAt,
-            status: s.status
+            name: s.name || undefined,
+            status: s.status,
+            createdAt: s.createdAt.toISOString(),
         }));
     } catch (error) {
         console.error('Error fetching subscribers:', error);
@@ -26,7 +30,7 @@ export async function getSubscribers(): Promise<Subscriber[]> {
     }
 }
 
-export async function subscribeToNewsletter(email: string): Promise<{ success: boolean; error?: string }> {
+export async function subscribeToNewsletter(email: string, name?: string): Promise<{ success: boolean; error?: string }> {
     try {
         // Validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -34,30 +38,38 @@ export async function subscribeToNewsletter(email: string): Promise<{ success: b
             return { success: false, error: 'Email không hợp lệ' };
         }
 
-        const result = await addSubscriber(email);
+        // Check if already subscribed
+        const existing = await prisma.subscriber.findUnique({
+            where: { email },
+        });
 
-        if (result.success) {
-            revalidatePath('/admin/newsletter');
+        if (existing) {
+            return { success: false, error: 'Email này đã được đăng ký' };
         }
 
-        return result;
+        await prisma.subscriber.create({
+            data: {
+                email,
+                name,
+                status: 'active',
+            },
+        });
+
+        return { success: true };
     } catch (error) {
         console.error('Error subscribing:', error);
-        return { success: false, error: 'Lỗi hệ thống. Vui lòng thử lại.' };
+        return { success: false, error: 'Lỗi hệ thống' };
     }
 }
 
 export async function unsubscribeFromNewsletter(email: string): Promise<{ success: boolean; error?: string }> {
     try {
-        const result = await removeSubscriber(email);
-
-        if (result.success) {
-            revalidatePath('/admin/newsletter');
-        }
-
-        return result;
+        await prisma.subscriber.delete({
+            where: { email },
+        });
+        return { success: true };
     } catch (error) {
         console.error('Error unsubscribing:', error);
-        return { success: false, error: 'Lỗi hệ thống. Vui lòng thử lại.' };
+        return { success: false, error: 'Lỗi hệ thống' };
     }
 }

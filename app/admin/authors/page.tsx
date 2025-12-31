@@ -12,6 +12,7 @@ export default function AuthorsManagementPage() {
     const [editingAuthor, setEditingAuthor] = useState<Author | null>(null);
     const [formData, setFormData] = useState<CreateAuthorInput>({
         name: "",
+        role: "Bác sỹ Vật lý trị liệu",
         avatar: "",
         bio: "",
         socialLinks: {
@@ -91,6 +92,7 @@ export default function AuthorsManagementPage() {
         setEditingAuthor(author);
         setFormData({
             name: author.name,
+            role: author.role,
             avatar: author.avatar,
             bio: author.bio,
             socialLinks: author.socialLinks
@@ -113,6 +115,7 @@ export default function AuthorsManagementPage() {
     const resetForm = () => {
         setFormData({
             name: "",
+            role: "Bác sỹ Vật lý trị liệu",
             avatar: "",
             bio: "",
             socialLinks: {
@@ -182,8 +185,8 @@ export default function AuthorsManagementPage() {
                                         type="button"
                                         onClick={() => setImageTab('url')}
                                         className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${imageTab === 'url'
-                                                ? 'bg-primary text-primary-content'
-                                                : 'bg-gray-100 text-text-main hover:bg-gray-200'
+                                            ? 'bg-primary text-primary-content'
+                                            : 'bg-gray-100 text-text-main hover:bg-gray-200'
                                             }`}
                                     >
                                         URL hình ảnh
@@ -192,8 +195,8 @@ export default function AuthorsManagementPage() {
                                         type="button"
                                         onClick={() => setImageTab('upload')}
                                         className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${imageTab === 'upload'
-                                                ? 'bg-primary text-primary-content'
-                                                : 'bg-gray-100 text-text-main hover:bg-gray-200'
+                                            ? 'bg-primary text-primary-content'
+                                            : 'bg-gray-100 text-text-main hover:bg-gray-200'
                                             }`}
                                     >
                                         Tải lên
@@ -338,17 +341,17 @@ export default function AuthorsManagementPage() {
                                                     <h3 className="text-xl font-bold text-text-main">{author.name}</h3>
                                                     <p className="mt-1 text-sm text-text-sub line-clamp-2">{author.bio}</p>
                                                     <div className="mt-2 flex items-center gap-3">
-                                                        {author.socialLinks.facebook && (
+                                                        {author.socialLinks?.facebook && (
                                                             <a href={author.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-xs">
                                                                 Facebook
                                                             </a>
                                                         )}
-                                                        {author.socialLinks.linkedin && (
+                                                        {author.socialLinks?.linkedin && (
                                                             <a href={author.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-xs">
                                                                 LinkedIn
                                                             </a>
                                                         )}
-                                                        {author.socialLinks.twitter && (
+                                                        {author.socialLinks?.twitter && (
                                                             <a href={author.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-xs">
                                                                 Twitter
                                                             </a>

@@ -81,6 +81,7 @@ export async function createAuthor(input: CreateAuthorInput) {
         const author: Author = {
             id: `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`,
             name: input.name,
+            role: input.role,
             slug,
             avatar: input.avatar,
             bio: input.bio,

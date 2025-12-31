@@ -19,7 +19,7 @@ export async function sendNewsletter({ subject, content }: SendNewsletterInput):
 }> {
     try {
         const subscribers = await getSubscribers();
-        const activeSubscribers = subscribers.filter(s => s.status === 'ACTIVE'); // Only send to active ones
+        const activeSubscribers = subscribers.filter(s => s.status === 'active'); // Only send to active ones
 
         let sentCount = 0;
         const errors: string[] = [];

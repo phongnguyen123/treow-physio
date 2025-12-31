@@ -118,16 +118,7 @@ export async function createBooking(input: CreateBookingInput): Promise<{ succes
         return { success: true, booking };
     } catch (error) {
         console.error('Error creating booking:', error);
-
-        // Check if it's a Vercel filesystem error
-        if (error instanceof Error && error.message.includes('Vercel')) {
-            return {
-                success: false,
-                error: 'Tính năng đặt lịch tạm thời không khả dụng trên môi trường production. Vui lòng liên hệ trực tiếp qua hotline: +447882843513'
-            };
-        }
-
-        return { success: false, error: 'Không thể tạo lịch hẹn. Vui lòng thử lại hoặc liên hệ: +447882843513' };
+        return { success: false, error: 'Không thể tạo lịch hẹn. Vui lòng thử lại.' };
     }
 }
 

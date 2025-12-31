@@ -19,7 +19,8 @@ export default function PostsManagementPage() {
         category: "",
         image: "",
         readTime: "",
-        published: true
+        published: true,
+        authorId: "default-author"
     });
 
     const [imageTab, setImageTab] = useState<'upload' | 'url'>('url');
@@ -140,7 +141,8 @@ export default function PostsManagementPage() {
             category: "",
             image: "",
             readTime: "",
-            published: true
+            published: true,
+            authorId: "default-author"
         });
         setEditingPost(null);
         setShowForm(false);
@@ -270,7 +272,7 @@ export default function PostsManagementPage() {
                                     </label>
                                     <select
                                         value={formData.authorId || ""}
-                                        onChange={(e) => setFormData({ ...formData, authorId: e.target.value || undefined })}
+                                        onChange={(e) => setFormData({ ...formData, authorId: e.target.value || "default-author" })}
                                         className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                                     >
                                         <option value="">Không chọn tác giả</option>

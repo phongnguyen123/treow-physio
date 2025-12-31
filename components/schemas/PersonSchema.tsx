@@ -4,7 +4,7 @@ interface PersonSchemaProps {
         slug: string;
         avatar: string;
         bio: string;
-        socialLinks: {
+        socialLinks?: {
             facebook?: string;
             linkedin?: string;
             twitter?: string;
@@ -50,9 +50,9 @@ export default function PersonSchema({ author, articlesCount = 0 }: PersonSchema
             "name": "UK Medical School"
         },
         "sameAs": [
-            author.socialLinks.facebook,
-            author.socialLinks.linkedin,
-            author.socialLinks.twitter
+            author.socialLinks?.facebook,
+            author.socialLinks?.linkedin,
+            author.socialLinks?.twitter
         ].filter(Boolean),
         "mainEntityOfPage": {
             "@type": "ProfilePage",

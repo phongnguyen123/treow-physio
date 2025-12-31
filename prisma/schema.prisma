@@ -1,0 +1,165 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Author {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  bio       String   @db.Text
+  avatar    String
+  email     String?
+  facebook  String?
+  twitter   String?
+  linkedin  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  posts     Post[]
+  
+  @@map("authors")
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  
+  posts     Post[]
+  
+  @@map("categories")
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  
+  posts     PostTag[]
+  
+  @@map("tags")
+}
+
+model Post {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String   @db.Text
+  content     String   @db.Text
+  image       String
+  readTime    String
+  published   Boolean  @default(true)
+  views       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  publishedAt DateTime?
+  
+  authorId    String
+  author      Author   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  
+  tags        PostTag[]
+  
+  @@index([authorId])
+  @@index([categoryId])
+  @@index([published])
+  @@index([createdAt])
+  @@map("posts")
+}
+
+model PostTag {
+  postId    String
+  tagId     String
+  
+  post      Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag       Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  
+  @@id([postId, tagId])
+  @@map("post_tags")
+}
+
+model Booking {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String
+  service     String
+  date        String
+  time        String
+  message     String?  @db.Text
+  status      String   @default("pending")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([status])
+  @@index([createdAt])
+  @@map("bookings")
+}
+
+model Subscriber {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String?
+  status      String   @default("active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([status])
+  @@map("subscribers")
+}
+
+model SeoSettings {
+  id                    String   @id @default("default")
+  siteName              String
+  siteUrl               String
+  siteDescription       String   @db.Text
+  siteKeywords          String   @db.Text
+  siteLanguage          String   @default("vi")
+  contactEmail          String
+  contactPhone          String
+  contactAddress        String
+  brandingLogo          String?
+  brandingFavicon       String?
+  socialTwitter         String?
+  socialFacebook        String?
+  socialLinkedin        String?
+  analyticsGoogleId     String?
+  analyticsGtmId        String?
+  verificationGoogle    String?
+  verificationBing      String?
+  verificationFacebook  String?
+  robotsTxt             String   @db.Text
+  sitemapEnabled        Boolean  @default(true)
+  sitemapFrequency      String   @default("daily")
+  sitemapMaxEntries     Int      @default(1000)
+  structuredDataEnabled Boolean  @default(true)
+  openGraphEnabled      Boolean  @default(true)
+  twitterCardsEnabled   Boolean  @default(true)
+  canonicalEnabled      Boolean  @default(true)
+  breadcrumbsEnabled    Boolean  @default(true)
+  defaultAuthor         String?
+  copyright             String?
+  privacyPolicyUrl      String?
+  termsOfServiceUrl     String?
+  customHeaderCode      String?  @db.Text
+  customBodyCode        String?  @db.Text
+  customFooterCode      String?  @db.Text
+  inArticleAdCode       String?  @db.Text
+  inArticleAdPosition   String   @default("middle")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@map("seo_settings")
+}

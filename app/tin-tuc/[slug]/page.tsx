@@ -242,7 +242,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                                                 <span className="material-symbols-outlined text-base">arrow_forward</span>
                                             </Link>
                                             <div className="flex gap-3 mt-4">
-                                                {post.author.socialLinks.facebook && (
+                                                {post.author.socialLinks?.facebook && (
                                                     <a
                                                         href={post.author.socialLinks.facebook}
                                                         target="_blank"
@@ -252,7 +252,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                                                         Facebook
                                                     </a>
                                                 )}
-                                                {post.author.socialLinks.linkedin && (
+                                                {post.author.socialLinks?.linkedin && (
                                                     <a
                                                         href={post.author.socialLinks.linkedin}
                                                         target="_blank"
